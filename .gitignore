@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/.angular/cache/18.2.14/EcommerceFrontend
+/dist/ecommerce-frontend
+/node_modules

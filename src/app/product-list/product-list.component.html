@@ -1,0 +1,40 @@
+<div class="search-filters">
+    <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search products..." />
+    <input type="number" [(ngModel)]="minPrice" placeholder="Min Price" />
+    <input type="number" [(ngModel)]="maxPrice" placeholder="Max Price" />
+    <select [(ngModel)]="selectedTopLevelCategoryId" (change)="onTopLevelCategoryChange(selectedTopLevelCategoryId)">
+        <option value="null">All Categories</option>
+        <option *ngFor="let category of topLevelCategories" [value]="category.id">{{category.name}}</option>
+    </select>
+
+    <select *ngIf="selectedTopLevelCategoryId != null" [(ngModel)]="selectedSubcategoryId" (change)="onSubcategoryChange(selectedSubcategoryId)">
+        <option value="null">All Subcategories</option>
+        <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
+    </select>
+
+    <select *ngIf="selectedSubcategoryId != null && brands.length > 0" [(ngModel)]="selectedBrandId">
+        <option value="null">All Brands</option>
+        <option *ngFor="let brand of brands" [value]="brand.id">{{brand.name}}</option>
+    </select>
+
+    <select [(ngModel)]="sortBy">
+        <option value="">Default Sort</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name: A to Z</option>
+    </select>
+    <button (click)="onSearch()">Search</button>
+</div>
+
+<ul>
+    <li *ngFor="let product of products">
+        {{ product.name }} - ${{ product.price }} (Category ID: {{ product.categoryId }})
+        <button (click)="buyProduct(product)">Buy</button>
+    </li>
+</ul>
+
+<div class="pagination">
+    <button (click)="previousPage()" [disabled]="page === 1">Previous</button>
+    <span>Page {{ page }}</span>
+    <button (click)="nextPage()">Next</button>
+</div>

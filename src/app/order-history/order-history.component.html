@@ -1,0 +1,6 @@
+<h2>Order History</h2>
+<ul>
+    <li *ngFor="let order of orders">
+        {{ order.product.name }} - Quantity: {{ order.quantity }} - Date: {{ order.orderDate | date }}
+    </li>
+</ul>
