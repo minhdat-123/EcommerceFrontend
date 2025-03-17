@@ -31,9 +31,9 @@ export class ProductListComponent implements OnInit {
   constructor(private productService: ProductService, private orderService: OrderService) { }
 
   ngOnInit(): void {
-    //this.loadTopLevelCategories();
+    this.loadTopLevelCategories();
     this.onSearch();
-    this.loadProducts();
+    //this.loadProducts();
   }
   loadTopLevelCategories(): void {
     this.productService.getTopLevelCategories().subscribe(categories => {

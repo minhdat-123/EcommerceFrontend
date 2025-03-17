@@ -25,6 +25,7 @@ export class ProductService {
     maxPrice?: number;
     categoryId?: number;
     parentCategoryId?: number;
+    brandId?: number;
     sortBy?: string;
     page?: number;
     pageSize?: number;
@@ -35,6 +36,7 @@ export class ProductService {
     if (searchParams.maxPrice) params = params.set('maxPrice', searchParams.maxPrice.toString());
     if (searchParams.categoryId) params = params.set('categoryId', searchParams.categoryId.toString());
     if (searchParams.parentCategoryId) params = params.set('parentCategoryId', searchParams.parentCategoryId.toString());
+    if (searchParams.brandId) params = params.set('brandId', searchParams.brandId.toString());
     if (searchParams.sortBy) params = params.set('sortBy', searchParams.sortBy);
     if (searchParams.page) params = params.set('page', searchParams.page.toString());
     if (searchParams.pageSize) params = params.set('pageSize', searchParams.pageSize.toString());
