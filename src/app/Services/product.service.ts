@@ -54,6 +54,8 @@ export class ProductService {
     return this.http.get<Category[]>(`${this.apiUrl}/categories`); // New endpoint (optional)
   }
 
-
+  getSuggestions(query: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/Product/suggestions?query=${query}`);
+  }
   
 }

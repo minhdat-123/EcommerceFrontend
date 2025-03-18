@@ -1,5 +1,12 @@
 <div class="search-filters">
-    <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search products..." />
+    <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput($event)" (keyup.enter)="onSearch()" placeholder="Search products..." />
+        <div class="suggestions-dropdown" *ngIf="showSuggestions">
+            <div class="suggestion-item" *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+                {{ suggestion }}
+            </div>
+        </div>
+    </div>
     <input type="number" [(ngModel)]="minPrice" placeholder="Min Price" />
     <input type="number" [(ngModel)]="maxPrice" placeholder="Max Price" />
     <select [(ngModel)]="selectedTopLevelCategoryId" (change)="onTopLevelCategoryChange(selectedTopLevelCategoryId)">

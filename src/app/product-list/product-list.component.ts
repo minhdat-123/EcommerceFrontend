@@ -5,6 +5,7 @@ import { Product } from '../models/product';
 import { Category } from '../models/category';
 import { Brand } from '../models/brand';
 import { NumberSymbol } from '@angular/common';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -26,6 +27,9 @@ export class ProductListComponent implements OnInit {
   sortBy: string = '';
   page: number = 1;
   pageSize: number = 10;
+  suggestions: string[] = [];
+  showSuggestions: boolean = false;
+  private searchTerms = new Subject<string>();
 
 
   constructor(private productService: ProductService, private orderService: OrderService) { }
@@ -34,7 +38,24 @@ export class ProductListComponent implements OnInit {
     this.loadTopLevelCategories();
     this.onSearch();
     //this.loadProducts();
+    
+    // Set up the search suggestions with debounce
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      if (term.trim().length > 0) {
+        this.productService.getSuggestions(term).subscribe(suggestions => {
+          this.suggestions = suggestions;
+          this.showSuggestions = this.suggestions.length > 0;
+        });
+      } else {
+        this.suggestions = [];
+        this.showSuggestions = false;
+      }
+    });
   }
+  
   loadTopLevelCategories(): void {
     this.productService.getTopLevelCategories().subscribe(categories => {
       this.topLevelCategories = categories;
@@ -81,31 +102,23 @@ export class ProductListComponent implements OnInit {
     };
     this.productService.searchProducts(searchParams).subscribe(data => this.products = data);
   }
+  
   loadProducts(): void {
     this.productService.getProducts().subscribe(data => this.products = data);
   }
 
-  //onSearch(): void {
-  //  let searchParams = {
-  //    query: this.searchQuery,
-  //    minPrice: this.minPrice ?? undefined,
-  //    maxPrice: this.maxPrice ?? undefined,
-  //    sortBy: this.sortBy,
-  //    categoryId: this.selectedSubcategoryId ?? undefined,
-  //    parentCategoryId: this.selectedTopLevelCategoryId ?? undefined,
-  //    page: this.page,
-  //    pageSize: this.pageSize
-  //  };
-  //  //if (this.selectedTopLevelCategoryId != null) {
-  //  //  if (this.selectedSubcategoryId != null) {
-  //  //    searchParams.categoryId = this.selectedSubcategoryId;
-  //  //  } else {
-  //  //    searchParams.parentCategoryId = this.selectedTopLevelCategoryId;
-  //  //  }
-  //  //}
-  //  this.productService.searchProducts(searchParams).subscribe(data => this.products = data);
-  //}
+  // Method to handle search input changes
+  onSearchInput(event: any): void {
+    const term = event.target.value;
+    this.searchTerms.next(term);
+  }
 
+  // Method to select a suggestion
+  selectSuggestion(suggestion: string): void {
+    this.searchQuery = suggestion;
+    this.showSuggestions = false;
+    this.onSearch();
+  }
 
   buyProduct(product: Product): void {
     const order = { productId: product.id, quantity: 1 };
