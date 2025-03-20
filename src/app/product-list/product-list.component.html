@@ -1,6 +1,6 @@
 <div class="search-filters">
     <div class="search-container">
-        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput($event)" (keyup.enter)="onSearch()" placeholder="Search products..." />
+        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput($event)" (keyup.enter)="page = 1; onSearch()" placeholder="Search products..." />
         <div class="suggestions-dropdown" *ngIf="showSuggestions">
             <div class="suggestion-item" *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
                 {{ suggestion }}
@@ -31,18 +31,36 @@
         <option value="name-asc">Name: A to Z</option>
         <option value="name-desc">Name: Z to A</option>
     </select>
-    <button (click)="onSearch()">Search</button>
+    <button (click)="page = 1; onSearch()" [disabled]="isLoading">Search</button>
 </div>
 
-<ul>
-    <li *ngFor="let product of products">
-        {{ product.name }} - ${{ product.price }} (Category ID: {{ product.categoryId }})
-        <button (click)="buyProduct(product)">Buy</button>
+<!-- Loading Indicator -->
+<div class="loading-spinner" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+</div>
+
+<!-- No Results Message -->
+<div class="no-results" *ngIf="!isLoading && products.length === 0">
+    <p>No products found matching your criteria. Try adjusting your filters.</p>
+</div>
+
+<!-- Product List -->
+<ul class="product-list" *ngIf="!isLoading && products.length > 0">
+    <li *ngFor="let product of products" class="product-item">
+        <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <p class="product-price">${{ product.price.toFixed(2) }}</p>
+            <p class="product-description">{{ product.description }}</p>
+            <p class="product-category">Category: {{ product.categoryName }}</p>
+            <p class="product-brand">Brand: {{ product.brandName }}</p>
+        </div>
+        <button (click)="buyProduct(product)" [disabled]="isLoading">Buy Now</button>
     </li>
 </ul>
 
-<div class="pagination">
-    <button (click)="previousPage()" [disabled]="page === 1">Previous</button>
+<div class="pagination" *ngIf="products.length > 0">
+    <button (click)="previousPage()" [disabled]="page === 1 || isLoading">Previous</button>
     <span>Page {{ page }}</span>
-    <button (click)="nextPage()">Next</button>
+    <button (click)="nextPage()" [disabled]="products.length < pageSize || isLoading">Next</button>
 </div>

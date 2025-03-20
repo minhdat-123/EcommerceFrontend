@@ -9,10 +9,36 @@ import { Order } from '../models/order';
 })
 export class OrderHistoryComponent implements OnInit {
   orders: Order[] = [];
+  isLoading: boolean = false;
+  error: string | null = null;
 
   constructor(private orderService: OrderService) { }
 
   ngOnInit(): void {
-    this.orderService.getOrders().subscribe(data => this.orders = data);
+    this.loadOrders();
+  }
+
+  loadOrders(): void {
+    this.isLoading = true;
+    this.error = null;
+    
+    this.orderService.getOrders().subscribe({
+      next: (data) => {
+        this.orders = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading orders:', err);
+        this.error = 'Failed to load order history. Please try again later.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Format date string for display
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   }
 }
