@@ -30,8 +30,10 @@
         <option value="price-desc">Price: High to Low</option>
         <option value="name-asc">Name: A to Z</option>
         <option value="name-desc">Name: Z to A</option>
+        <option value="newest">Newest to Oldest</option>
     </select>
     <button (click)="page = 1; onSearch()" [disabled]="isLoading">Search</button>
+    <button class="add-product-button" (click)="showAddProductModal()" [disabled]="isLoading">Add Product</button>
 </div>
 
 <!-- Loading Indicator -->
@@ -55,12 +57,30 @@
             <p class="product-category">Category: {{ product.categoryName }}</p>
             <p class="product-brand">Brand: {{ product.brandName }}</p>
         </div>
-        <button (click)="buyProduct(product)" [disabled]="isLoading">Buy Now</button>
+        <!-- Buy button commented out for future use -->
+        <!-- <button (click)="buyProduct(product)" [disabled]="isLoading">Buy Now</button> -->
     </li>
 </ul>
 
 <div class="pagination" *ngIf="products.length > 0">
     <button (click)="previousPage()" [disabled]="page === 1 || isLoading">Previous</button>
-    <span>Page {{ page }}</span>
-    <button (click)="nextPage()" [disabled]="products.length < pageSize || isLoading">Next</button>
+    <span>Page {{ page }} of {{ calculateTotalPages() }}</span>
+    <span class="total-items">Total: {{ totalItems }} items</span>
+    <button (click)="nextPage()" [disabled]="page >= calculateTotalPages() || isLoading">Next</button>
+    <div class="page-size-selector">
+        <label for="pageSize">Items per page:</label>
+        <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+        </select>
+    </div>
 </div>
+
+<!-- Add Product Modal -->
+<app-add-product 
+    *ngIf="showAddProduct" 
+    (closeModal)="hideAddProductModal()" 
+    (productAdded)="onProductAdded()">
+</app-add-product>

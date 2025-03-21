@@ -29,7 +29,7 @@ export class ProductService {
     sortBy?: string;
     page?: number;
     pageSize?: number;
-  }): Observable<Product[]> {
+  }): Observable<{ products: Product[], totalCount: number }> {
     let params = new HttpParams();
     if (searchParams.query) params = params.set('query', searchParams.query);
     if (searchParams.minPrice) params = params.set('minPrice', searchParams.minPrice.toString());
@@ -41,7 +41,7 @@ export class ProductService {
     if (searchParams.page) params = params.set('page', searchParams.page.toString());
     if (searchParams.pageSize) params = params.set('pageSize', searchParams.pageSize.toString());
 
-    return this.http.get<Product[]>(`${this.apiUrl}/products/search`, { params });
+    return this.http.get<{ products: Product[], totalCount: number }>(`${this.apiUrl}/products/search`, { params });
   }
   getTopLevelCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}/categories/top-level`);
@@ -56,6 +56,16 @@ export class ProductService {
 
   getSuggestions(query: string): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/Product/suggestions?query=${query}`);
+  }
+  
+  addProduct(product: {
+    name: string;
+    description: string;
+    price: number;
+    categoryId: number;
+    brandId: number;
+  }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Product`, product);
   }
   
 }

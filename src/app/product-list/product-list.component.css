@@ -30,6 +30,14 @@
     cursor: not-allowed;
   }
 
+  .add-product-button {
+    background-color: #28a745;
+  }
+
+  .add-product-button:hover:not(:disabled) {
+    background-color: #218838;
+  }
+
 .search-container {
   position: relative;
   display: inline-block;
@@ -189,6 +197,30 @@
 .pagination button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.page-size-selector {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.page-size-selector label {
+  margin-right: 8px;
+  font-size: 0.9em;
+}
+
+.page-size-selector select {
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.total-items {
+  margin: 0 15px;
+  font-size: 0.9em;
+  color: #666;
 }
 
 /* Responsive Design */

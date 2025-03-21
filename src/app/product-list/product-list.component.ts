@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../Services/product.service';
-import { OrderService } from '../Services/order.service';
+// Import commented out for future use
+// import { OrderService } from '../Services/order.service';
 import { Product } from '../models/product';
 import { Category } from '../models/category';
 import { Brand } from '../models/brand';
@@ -30,9 +31,14 @@ export class ProductListComponent implements OnInit {
   showSuggestions: boolean = false;
   isLoading: boolean = false;
   totalItems: number = 0;
+  showAddProduct: boolean = false;
   private searchTerms = new Subject<string>();
 
-  constructor(private productService: ProductService, private orderService: OrderService) { }
+  constructor(
+    private productService: ProductService, 
+    // Service commented out for future use
+    // private orderService: OrderService
+  ) { }
 
   ngOnInit(): void {
     this.loadTopLevelCategories();
@@ -146,14 +152,15 @@ export class ProductListComponent implements OnInit {
     };
     
     this.productService.searchProducts(searchParams).subscribe({
-      next: (data) => {
-        this.products = data || [];
-        this.totalItems = data ? data.length : 0;
+      next: (response) => {
+        this.products = response.products || [];
+        this.totalItems = response.totalCount;
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error searching products:', error);
         this.products = [];
+        this.totalItems = 0;
         this.isLoading = false;
       }
     });
@@ -188,6 +195,8 @@ export class ProductListComponent implements OnInit {
     this.onSearch();
   }
 
+  // Method commented out for future use
+  /*
   buyProduct(product: Product): void {
     this.isLoading = true;
     const order = { productId: product.id, quantity: 1 };
@@ -203,7 +212,8 @@ export class ProductListComponent implements OnInit {
       }
     });
   }
-  
+  */
+
   previousPage(): void {
     if (this.page > 1) {
       this.page--;
@@ -212,10 +222,59 @@ export class ProductListComponent implements OnInit {
   }
 
   nextPage(): void {
-    if (this.products.length > 0) {
+    if (this.page < this.calculateTotalPages()) {
       this.page++;
       this.onSearch();
     }
+  }
+
+  onPageSizeChange(): void {
+    // Reset to page 1 when changing page size
+    this.page = 1;
+    // Reload products with new page size
+    this.onSearch();
+  }
+
+  calculateTotalPages(): number {
+    if (this.totalItems <= 0) return 1;
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  showAddProductModal(): void {
+    // If subcategory is selected, we'll use subcategories, otherwise use top level categories
+    if (this.selectedSubcategoryId != null) {
+      // If we have a subcategory selected, make sure to get the brands for that subcategory
+      if (this.brands.length === 0) {
+        this.isLoading = true;
+        this.productService.getBrandsByCategory(this.selectedSubcategoryId).subscribe({
+          next: (brands) => {
+            this.brands = brands || [];
+            this.isLoading = false;
+            this.showAddProduct = true;
+          },
+          error: (error) => {
+            console.error('Error loading brands:', error);
+            this.brands = [];
+            this.isLoading = false;
+            this.showAddProduct = true;
+          }
+        });
+      } else {
+        this.showAddProduct = true;
+      }
+    } else {
+      this.showAddProduct = true;
+    }
+  }
+
+  hideAddProductModal(): void {
+    this.showAddProduct = false;
+  }
+
+  onProductAdded(): void {
+    // Refresh the product list after a product is added
+    this.page = 1; // Reset to first page
+    this.onSearch();
   }
 
   // Helper method to safely parse number values from form inputs
