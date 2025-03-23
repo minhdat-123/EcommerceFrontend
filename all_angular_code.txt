@@ -1,0 +1,1536 @@
+﻿--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\index.html ---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EcommerceFrontend</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\index.html ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\main.ts ---
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule, {
+  ngZoneEventCoalescing: true
+})
+  .catch(err => console.error(err));
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\main.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\styles.css ---
+/* You can add global styles to this file, and also import other style files */
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\styles.css ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app-routing.module.ts ---
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ProductListComponent } from './product-list/product-list.component';
+// Import commented out for future use
+// import { OrderHistoryComponent } from './order-history/order-history.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
+  { path: 'products', component: ProductListComponent },
+  // Route commented out for future use
+  // { path: 'orders', component: OrderHistoryComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app-routing.module.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.css ---
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+nav {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+    nav a:hover {
+      background-color: #e9ecef;
+    }
+
+    nav a.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.css ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.html ---
+<div class="app-container">
+    <h1>E-commerce Site</h1>
+    <nav>
+        <ul>
+            <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+            <!-- Order History link commented out for future use -->
+            <!-- <li><a routerLink="/orders" routerLinkActive="active">Order History</a></li> -->
+        </ul>
+    </nav>
+    <router-outlet></router-outlet>
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.html ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.spec.ts ---
+import { TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
+
+describe('AppComponent', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        RouterModule.forRoot([])
+      ],
+      declarations: [
+        AppComponent
+      ],
+    }).compileComponents();
+  });
+
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it(`should have as title 'EcommerceFrontend'`, () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.title).toEqual('EcommerceFrontend');
+  });
+
+  it('should render title', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, EcommerceFrontend');
+  });
+});
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.spec.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.ts ---
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+export class AppComponent {
+  title = 'EcommerceFrontend';
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.component.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.module.ts ---
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ProductListComponent } from './product-list/product-list.component';
+// Import commented out for future use
+// import { OrderHistoryComponent } from './order-history/order-history.component';
+import { AddProductComponent } from './add-product/add-product.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ProductListComponent,
+    // Component commented out for future use
+    // OrderHistoryComponent,
+    AddProductComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\app.module.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\add-product\add-product.component.css ---
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.error-message {
+  color: #d9534f;
+  margin-bottom: 15px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button {
+  padding: 8px 15px;
+  background-color: #4a69bd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #3c56a5;
+}
+
+.submit-button:disabled {
+  background-color: #95a5ce;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .modal {
+    width: 95%;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .button-group button {
+    width: 100%;
+  }
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\add-product\add-product.component.css ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\add-product\add-product.component.html ---
+<div class="modal-backdrop"></div>
+<div class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add New Product</h2>
+      <button class="close-button" (click)="close()">×</button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Product Name *</label>
+          <input type="text" id="name" [(ngModel)]="product.name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" [(ngModel)]="product.description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price *</label>
+          <input type="number" id="price" [(ngModel)]="product.price" name="price" min="0.01" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+          <label for="topLevelCategory">Top Level Category *</label>
+          <select id="topLevelCategory" [(ngModel)]="selectedTopLevelCategoryId" 
+                  name="topLevelCategoryId" 
+                  (change)="onTopLevelCategoryChange(selectedTopLevelCategoryId)" required>
+            <option [ngValue]="null">Select a Category</option>
+            <option *ngFor="let category of topLevelCategories" [ngValue]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="selectedTopLevelCategoryId != null">
+          <label for="subcategory">Subcategory *</label>
+          <select id="subcategory" [(ngModel)]="selectedSubcategoryId" 
+                  name="subcategoryId" 
+                  (change)="onSubcategoryChange(selectedSubcategoryId)" required>
+            <option [ngValue]="null">Select a Subcategory</option>
+            <option *ngFor="let subcategory of subcategories" [ngValue]="subcategory.id">{{ subcategory.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="selectedSubcategoryId != null && brands.length > 0">
+          <label for="brand">Brand *</label>
+          <select id="brand" [(ngModel)]="product.brandId" 
+                  name="brandId" 
+                  (change)="onBrandChange(product.brandId)" required>
+            <option [ngValue]="0">Select a Brand</option>
+            <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.name }}</option>
+          </select>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        <div class="button-group">
+          <button type="button" class="cancel-button" (click)="close()">Cancel</button>
+          <button type="submit" class="submit-button" [disabled]="isLoading">
+            <span *ngIf="isLoading">Adding...</span>
+            <span *ngIf="!isLoading">Add Product</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\add-product\add-product.component.html ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\add-product\add-product.component.ts ---
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ProductService } from '../Services/product.service';
+import { Category } from '../models/category';
+import { Brand } from '../models/brand';
+
+@Component({
+  selector: 'app-add-product',
+  templateUrl: './add-product.component.html',
+  styleUrls: ['./add-product.component.css']
+})
+export class AddProductComponent implements OnInit {
+  @Output() productAdded = new EventEmitter<boolean>();
+  @Output() closeModal = new EventEmitter<void>();
+
+  product = {
+    name: '',
+    description: '',
+    price: 0,
+    categoryId: 0,
+    brandId: 0
+  };
+
+  topLevelCategories: Category[] = [];
+  subcategories: Category[] = [];
+  brands: Brand[] = [];
+  selectedTopLevelCategoryId: number | null = null;
+  selectedSubcategoryId: number | null = null;
+
+  isLoading: boolean = false;
+  errorMessage: string = '';
+
+  constructor(private productService: ProductService) { }
+
+  ngOnInit(): void {
+    this.loadTopLevelCategories();
+  }
+
+  loadTopLevelCategories(): void {
+    this.isLoading = true;
+    this.productService.getTopLevelCategories().subscribe({
+      next: (categories) => {
+        this.topLevelCategories = categories || [];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.topLevelCategories = [];
+        this.isLoading = false;
+        this.errorMessage = 'Failed to load categories. Please try again.';
+      }
+    });
+  }
+
+  onTopLevelCategoryChange(categoryIdValue: any): void {
+    // Convert to number or set to null if "null" string or empty
+    const categoryId = categoryIdValue && categoryIdValue !== "null" ? 
+      Number(categoryIdValue) : null;
+    
+    this.selectedTopLevelCategoryId = categoryId;
+    this.selectedSubcategoryId = null;
+    this.product.categoryId = 0;
+    this.product.brandId = 0;
+    this.brands = [];
+    
+    if (this.selectedTopLevelCategoryId !== null) {
+      this.isLoading = true;
+      this.productService.getSubcategories(this.selectedTopLevelCategoryId).subscribe({
+        next: (subcategories) => {
+          this.subcategories = subcategories || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading subcategories:', error);
+          this.subcategories = [];
+          this.isLoading = false;
+          this.errorMessage = 'Failed to load subcategories. Please try again.';
+        }
+      });
+    } else {
+      this.subcategories = [];
+    }
+  }
+
+  onSubcategoryChange(categoryIdValue: any): void {
+    // Convert to number or set to null if "null" string or empty
+    const categoryId = categoryIdValue && categoryIdValue !== "null" ? 
+      Number(categoryIdValue) : null;
+    
+    this.selectedSubcategoryId = categoryId;
+    this.product.brandId = 0;
+    
+    if (categoryId) {
+      this.product.categoryId = categoryId;
+    } else {
+      this.product.categoryId = 0;
+    }
+    
+    if (this.selectedSubcategoryId !== null) {
+      this.isLoading = true;
+      this.productService.getBrandsByCategory(this.selectedSubcategoryId).subscribe({
+        next: (brands) => {
+          this.brands = brands || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading brands:', error);
+          this.brands = [];
+          this.isLoading = false;
+          this.errorMessage = 'Failed to load brands. Please try again.';
+        }
+      });
+    } else {
+      this.brands = [];
+    }
+  }
+
+  onBrandChange(brandIdValue: any): void {
+    const brandId = brandIdValue && brandIdValue !== "null" ? 
+      Number(brandIdValue) : 0;
+    
+    this.product.brandId = brandId;
+  }
+
+  onSubmit(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    // Validate form
+    if (!this.product.name.trim()) {
+      this.errorMessage = 'Product name is required';
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.product.price <= 0) {
+      this.errorMessage = 'Price must be greater than 0';
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.product.categoryId <= 0) {
+      this.errorMessage = 'Please select a category';
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.product.brandId <= 0) {
+      this.errorMessage = 'Please select a brand';
+      this.isLoading = false;
+      return;
+    }
+
+    this.productService.addProduct(this.product).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.productAdded.emit(true);
+        this.close();
+      },
+      error: (error) => {
+        console.error('Error adding product:', error);
+        this.errorMessage = error.message || 'Failed to add product. Please try again.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  close(): void {
+    this.closeModal.emit();
+  }
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\add-product\add-product.component.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\brand.ts ---
+export interface Brand {
+  id: number;
+  name: string;
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\brand.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\category.ts ---
+export interface Category {
+  id: number;
+  name: string;
+  parentCategoryId?: number;
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\category.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\order.ts ---
+/*
+ * Order Model - Temporarily disabled
+ * This model will be used for order functionality in the future
+ * Currently all order functionality is commented out throughout the app
+ */
+
+import { Product } from './product';
+// export interface Order {
+//   id: number;
+//   productId: number;
+//   product: Product;
+//   orderDate: string;
+//   quantity: number;
+// }
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\order.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\product.ts ---
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  categoryId: number; // New field
+  categoryName: string; // Added to match backend ProductDocument
+  brandId: number;
+  brandName: string; // Added to match backend ProductDocument
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\models\product.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.css ---
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.css ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.html ---
+<h2>Order History</h2>
+<ul>
+    <li *ngFor="let order of orders">
+        {{ order.product.name }} - Quantity: {{ order.quantity }} - Date: {{ order.orderDate | date }}
+    </li>
+</ul>
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.html ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.spec.ts ---
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { OrderHistoryComponent } from './order-history.component';
+
+describe('OrderHistoryComponent', () => {
+  let component: OrderHistoryComponent;
+  let fixture: ComponentFixture<OrderHistoryComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [OrderHistoryComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(OrderHistoryComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.spec.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.ts ---
+import { Component, OnInit } from '@angular/core';
+import { OrderService } from '../Services/order.service';
+import { Order } from '../models/order';
+
+@Component({
+  selector: 'app-order-history',
+  templateUrl: './order-history.component.html',
+  styleUrls: ['./order-history.component.css']
+})
+export class OrderHistoryComponent implements OnInit {
+  orders: Order[] = [];
+  isLoading: boolean = false;
+  error: string | null = null;
+
+  constructor(private orderService: OrderService) { }
+
+  ngOnInit(): void {
+    this.loadOrders();
+  }
+
+  loadOrders(): void {
+    this.isLoading = true;
+    this.error = null;
+    
+    this.orderService.getOrders().subscribe({
+      next: (data) => {
+        this.orders = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading orders:', err);
+        this.error = 'Failed to load order history. Please try again later.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Format date string for display
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  }
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\order-history\order-history.component.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.css ---
+.search-filters {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+  .search-filters input, .search-filters select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .search-filters button {
+    padding: 8px 16px;
+    background-color: #4a69bd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .search-filters button:hover {
+    background-color: #3c56a5;
+  }
+
+  .search-filters button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .add-product-button {
+    background-color: #28a745;
+  }
+
+  .add-product-button:hover:not(:disabled) {
+    background-color: #218838;
+  }
+
+.search-container {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.suggestion-item {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #4a69bd;
+  animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* No Results Message */
+.no-results {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+/* Product List */
+.product-list {
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.product-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-item h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.product-price {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #4a69bd;
+  margin: 10px 0;
+}
+
+.product-description {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
+
+.product-category {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.product-item button {
+  background-color: #4a69bd;
+  color: white;
+  border: none;
+  padding: 8px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.product-item button:hover:not(:disabled) {
+  background-color: #3c56a5;
+}
+
+.product-item button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  background-color: #4a69bd;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #3c56a5;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-size-selector {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.page-size-selector label {
+  margin-right: 8px;
+  font-size: 0.9em;
+}
+
+.page-size-selector select {
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.total-items {
+  margin: 0 15px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .search-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-container {
+    width: 100%;
+  }
+  
+  .product-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.css ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.html ---
+<div class="search-filters">
+    <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" (input)="onSearchInput($event)" (keyup.enter)="page = 1; onSearch()" placeholder="Search products..." />
+        <div class="suggestions-dropdown" *ngIf="showSuggestions">
+            <div class="suggestion-item" *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+                {{ suggestion }}
+            </div>
+        </div>
+    </div>
+    <input type="number" [(ngModel)]="minPrice" placeholder="Min Price" />
+    <input type="number" [(ngModel)]="maxPrice" placeholder="Max Price" />
+    <select [(ngModel)]="selectedTopLevelCategoryId" (change)="onTopLevelCategoryChange(selectedTopLevelCategoryId)">
+        <option value="null">All Categories</option>
+        <option *ngFor="let category of topLevelCategories" [value]="category.id">{{category.name}}</option>
+    </select>
+
+    <select *ngIf="selectedTopLevelCategoryId != null" [(ngModel)]="selectedSubcategoryId" (change)="onSubcategoryChange(selectedSubcategoryId)">
+        <option value="null">All Subcategories</option>
+        <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
+    </select>
+
+    <select *ngIf="selectedSubcategoryId != null && brands.length > 0" [(ngModel)]="selectedBrandId">
+        <option value="null">All Brands</option>
+        <option *ngFor="let brand of brands" [value]="brand.id">{{brand.name}}</option>
+    </select>
+
+    <select [(ngModel)]="sortBy">
+        <option value="">No Sort</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name: A to Z</option>
+        <option value="name-desc">Name: Z to A</option>
+        <option value="newest">Newest to Oldest</option>
+    </select>
+    <button (click)="page = 1; onSearch()" [disabled]="isLoading">Search</button>
+    <button class="add-product-button" (click)="showAddProductModal()" [disabled]="isLoading">Add Product</button>
+</div>
+
+<!-- Loading Indicator -->
+<div class="loading-spinner" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+</div>
+
+<!-- No Results Message -->
+<div class="no-results" *ngIf="!isLoading && products.length === 0">
+    <p>No products found matching your criteria. Try adjusting your filters.</p>
+</div>
+
+<!-- Product List -->
+<ul class="product-list" *ngIf="!isLoading && products.length > 0">
+    <li *ngFor="let product of products" class="product-item">
+        <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <p class="product-price">${{ product.price.toFixed(2) }}</p>
+            <p class="product-description">{{ product.description }}</p>
+            <p class="product-category">Category: {{ product.categoryName }}</p>
+            <p class="product-brand">Brand: {{ product.brandName }}</p>
+        </div>
+        <!-- Buy button commented out for future use -->
+        <!-- <button (click)="buyProduct(product)" [disabled]="isLoading">Buy Now</button> -->
+    </li>
+</ul>
+
+<div class="pagination" *ngIf="products.length > 0">
+    <button (click)="previousPage()" [disabled]="page === 1 || isLoading">Previous</button>
+    <span>Page {{ page }} of {{ calculateTotalPages() }}</span>
+    <span class="total-items">Total: {{ totalItems }} items</span>
+    <button (click)="nextPage()" [disabled]="page >= calculateTotalPages() || isLoading">Next</button>
+    <div class="page-size-selector">
+        <label for="pageSize">Items per page:</label>
+        <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+        </select>
+    </div>
+</div>
+
+<!-- Add Product Modal -->
+<app-add-product 
+    *ngIf="showAddProduct" 
+    (closeModal)="hideAddProductModal()" 
+    (productAdded)="onProductAdded()">
+</app-add-product>
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.html ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.spec.ts ---
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ProductListComponent } from './product-list.component';
+
+describe('ProductListComponent', () => {
+  let component: ProductListComponent;
+  let fixture: ComponentFixture<ProductListComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ProductListComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(ProductListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.spec.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.ts ---
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../Services/product.service';
+// Import commented out for future use
+// import { OrderService } from '../Services/order.service';
+import { Product } from '../models/product';
+import { Category } from '../models/category';
+import { Brand } from '../models/brand';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+
+@Component({
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.css']
+})
+export class ProductListComponent implements OnInit {
+  products: Product[] = [];
+  brands: Brand[] = [];
+  topLevelCategories: Category[] = [];
+  subcategories: Category[] = [];
+  selectedTopLevelCategoryId: number | null = null;
+  selectedSubcategoryId: number | null = null;
+  selectedBrandId: number | null = null;
+  searchQuery: string = '';
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  selectedCategory: number | null = null;
+  sortBy: string = '';
+  page: number = 1;
+  pageSize: number = 10;
+  suggestions: string[] = [];
+  showSuggestions: boolean = false;
+  isLoading: boolean = false;
+  totalItems: number = 0;
+  showAddProduct: boolean = false;
+  private searchTerms = new Subject<string>();
+
+  constructor(
+    private productService: ProductService, 
+    // Service commented out for future use
+    // private orderService: OrderService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadTopLevelCategories();
+    this.onSearch();
+    
+    // Set up the search suggestions with debounce
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      if (term.trim().length > 0) {
+        this.productService.getSuggestions(term).subscribe({
+          next: (suggestions) => {
+            this.suggestions = suggestions || [];
+            this.showSuggestions = this.suggestions.length > 0;
+          },
+          error: (error) => {
+            console.error('Error fetching suggestions:', error);
+            this.suggestions = [];
+            this.showSuggestions = false;
+          }
+        });
+      } else {
+        this.suggestions = [];
+        this.showSuggestions = false;
+      }
+    });
+  }
+  
+  loadTopLevelCategories(): void {
+    this.isLoading = true;
+    this.productService.getTopLevelCategories().subscribe({
+      next: (categories) => {
+        this.topLevelCategories = categories || [];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.topLevelCategories = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onTopLevelCategoryChange(categoryIdValue: any): void {
+    // Convert to number or set to null if "null" string or empty
+    const categoryId = categoryIdValue && categoryIdValue !== "null" ? 
+      Number(categoryIdValue) : null;
+    
+    this.selectedTopLevelCategoryId = categoryId;
+    this.selectedBrandId = null;
+    this.brands = [];
+    this.selectedSubcategoryId = null;
+    
+    if (this.selectedTopLevelCategoryId !== null) {
+      this.isLoading = true;
+      this.productService.getSubcategories(this.selectedTopLevelCategoryId).subscribe({
+        next: (subcategories) => {
+          this.subcategories = subcategories || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading subcategories:', error);
+          this.subcategories = [];
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.subcategories = [];
+    }
+  }
+
+  onSubcategoryChange(categoryIdValue: any): void {
+    // Convert to number or set to null if "null" string or empty
+    const categoryId = categoryIdValue && categoryIdValue !== "null" ? 
+      Number(categoryIdValue) : null;
+    
+    this.selectedSubcategoryId = categoryId;
+    this.selectedBrandId = null;
+    this.brands = [];
+    
+    if (this.selectedSubcategoryId !== null) {
+      this.isLoading = true;
+      this.productService.getBrandsByCategory(this.selectedSubcategoryId).subscribe({
+        next: (brands) => {
+          this.brands = brands || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading brands:', error);
+          this.brands = [];
+          this.isLoading = false;
+        }
+      });
+    }
+  }
+
+  onSearch(): void {
+    this.isLoading = true;
+    
+    let searchParams = {
+      query: this.searchQuery,
+      minPrice: this.minPrice ?? undefined,
+      maxPrice: this.maxPrice ?? undefined,
+      sortBy: this.sortBy,
+      categoryId: this.selectedSubcategoryId ?? undefined,
+      parentCategoryId: this.selectedTopLevelCategoryId ?? undefined,
+      brandId: this.selectedBrandId ?? undefined,
+      page: this.page,
+      pageSize: this.pageSize
+    };
+    
+    this.productService.searchProducts(searchParams).subscribe({
+      next: (response) => {
+        this.products = response.products || [];
+        this.totalItems = response.totalCount;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error searching products:', error);
+        this.products = [];
+        this.totalItems = 0;
+        this.isLoading = false;
+      }
+    });
+  }
+  
+  loadProducts(): void {
+    this.isLoading = true;
+    this.productService.getProducts().subscribe({
+      next: (data) => {
+        this.products = data || [];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.products = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Method to handle search input changes
+  onSearchInput(event: any): void {
+    const term = event.target.value;
+    this.searchTerms.next(term);
+  }
+
+  // Method to select a suggestion
+  selectSuggestion(suggestion: string): void {
+    this.searchQuery = suggestion;
+    this.showSuggestions = false;
+    this.page = 1;
+    this.onSearch();
+  }
+
+  // Method commented out for future use
+  /*
+  buyProduct(product: Product): void {
+    this.isLoading = true;
+    const order = { productId: product.id, quantity: 1 };
+    this.orderService.addOrder(order).subscribe({
+      next: () => {
+        alert('Order placed successfully!');
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error placing order:', error);
+        alert('Failed to place order. Please try again.');
+        this.isLoading = false;
+      }
+    });
+  }
+  */
+
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.onSearch();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.calculateTotalPages()) {
+      this.page++;
+      this.onSearch();
+    }
+  }
+
+  onPageSizeChange(): void {
+    // Reset to page 1 when changing page size
+    this.page = 1;
+    // Reload products with new page size
+    this.onSearch();
+  }
+
+  calculateTotalPages(): number {
+    if (this.totalItems <= 0) return 1;
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  showAddProductModal(): void {
+    // If subcategory is selected, we'll use subcategories, otherwise use top level categories
+    if (this.selectedSubcategoryId != null) {
+      // If we have a subcategory selected, make sure to get the brands for that subcategory
+      if (this.brands.length === 0) {
+        this.isLoading = true;
+        this.productService.getBrandsByCategory(this.selectedSubcategoryId).subscribe({
+          next: (brands) => {
+            this.brands = brands || [];
+            this.isLoading = false;
+            this.showAddProduct = true;
+          },
+          error: (error) => {
+            console.error('Error loading brands:', error);
+            this.brands = [];
+            this.isLoading = false;
+            this.showAddProduct = true;
+          }
+        });
+      } else {
+        this.showAddProduct = true;
+      }
+    } else {
+      this.showAddProduct = true;
+    }
+  }
+
+  hideAddProductModal(): void {
+    this.showAddProduct = false;
+  }
+
+  onProductAdded(): void {
+    // Refresh the product list after a product is added
+    this.page = 1; // Reset to first page
+    this.onSearch();
+  }
+
+  // Helper method to safely parse number values from form inputs
+  parseNumber(value: any): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+    const parsed = Number(value);
+    return isNaN(parsed) ? null : parsed;
+  }
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\product-list\product-list.component.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\order.service.spec.ts ---
+import { TestBed } from '@angular/core/testing';
+
+import { OrderService } from './order.service';
+
+describe('OrderService', () => {
+  let service: OrderService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(OrderService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\order.service.spec.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\order.service.ts ---
+/*
+ * Order Service - Temporarily disabled
+ * This service will be used for order management in the future
+ * Currently all order functionality is commented out throughout the app
+ */
+
+/*
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Order } from '../../app/models/order';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class OrderService {
+  private apiUrl = 'https://localhost:7233/api';
+
+  constructor(private http: HttpClient) { }
+  
+  // Method to add a new order
+  addOrder(order: { productId: number; quantity: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/orders`, order);
+  }
+
+  // Method to get all orders
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/orders`);
+  }
+}
+*/
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\order.service.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\product.service.spec.ts ---
+import { TestBed } from '@angular/core/testing';
+
+import { ProductService } from './product.service';
+
+describe('ProductService', () => {
+  let service: ProductService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(ProductService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\product.service.spec.ts ---
+
+--- Start of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\product.service.ts ---
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Product } from '../../app/models/product';
+import { Category } from '../../app/models/category';
+import { Brand } from '../models/brand';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+  private apiUrl = 'https://localhost:7233/api';
+
+  constructor(private http: HttpClient) { }
+
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/products`);
+  }
+  getBrandsByCategory(categoryId: number): Observable<Brand[]> {
+    return this.http.get<Brand[]>(`${this.apiUrl}/Brand/category/${categoryId}`);
+  }
+  searchProducts(searchParams: {
+    query?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    categoryId?: number;
+    parentCategoryId?: number;
+    brandId?: number;
+    sortBy?: string;
+    page?: number;
+    pageSize?: number;
+  }): Observable<{ products: Product[], totalCount: number }> {
+    let params = new HttpParams();
+    if (searchParams.query) params = params.set('query', searchParams.query);
+    if (searchParams.minPrice) params = params.set('minPrice', searchParams.minPrice.toString());
+    if (searchParams.maxPrice) params = params.set('maxPrice', searchParams.maxPrice.toString());
+    if (searchParams.categoryId) params = params.set('categoryId', searchParams.categoryId.toString());
+    if (searchParams.parentCategoryId) params = params.set('parentCategoryId', searchParams.parentCategoryId.toString());
+    if (searchParams.brandId) params = params.set('brandId', searchParams.brandId.toString());
+    if (searchParams.sortBy) params = params.set('sortBy', searchParams.sortBy);
+    if (searchParams.page) params = params.set('page', searchParams.page.toString());
+    if (searchParams.pageSize) params = params.set('pageSize', searchParams.pageSize.toString());
+
+    return this.http.get<{ products: Product[], totalCount: number }>(`${this.apiUrl}/products/search`, { params });
+  }
+  getTopLevelCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/categories/top-level`);
+  }
+
+  getSubcategories(categoryId: number): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/categories/subcategories/${categoryId}`);
+  }
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/categories`); // New endpoint (optional)
+  }
+
+  getSuggestions(query: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/Product/suggestions?query=${query}`);
+  }
+  
+  addProduct(product: {
+    name: string;
+    description: string;
+    price: number;
+    categoryId: number;
+    brandId: number;
+  }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Product`, product);
+  }
+  
+}
+
+--- End of D:\project_demo\research_cty\research_query\research_query\EcommerceFrontend\src\app\Services\product.service.ts ---
+
