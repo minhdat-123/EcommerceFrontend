@@ -159,6 +159,7 @@ export class ProductListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error searching products:', error);
+        alert('Error searching products: ' + error.message);
         this.products = [];
         this.totalItems = 0;
         this.isLoading = false;
