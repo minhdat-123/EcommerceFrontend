@@ -125,43 +125,49 @@ export class AddProductComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Validate form
-    if (!this.product.name.trim()) {
-      this.errorMessage = 'Product name is required';
-      this.isLoading = false;
-      return;
-    }
-
-    if (this.product.price <= 0) {
-      this.errorMessage = 'Price must be greater than 0';
-      this.isLoading = false;
-      return;
-    }
-
-    if (this.product.categoryId <= 0) {
-      this.errorMessage = 'Please select a category';
-      this.isLoading = false;
-      return;
-    }
-
-    if (this.product.brandId <= 0) {
-      this.errorMessage = 'Please select a brand';
-      this.isLoading = false;
-      return;
-    }
-
-    this.productService.addProduct(this.product).subscribe({
-      next: () => {
+    try {
+      // Validate form
+      if (!this.product.name || !this.product.name.trim()) {
+        this.errorMessage = 'Product name is required';
         this.isLoading = false;
-        this.productAdded.emit(true);
-        this.close();
-      },
-      error: (error) => {
-        console.error('Error adding product:', error);
-        this.errorMessage = error.message || 'Failed to add product. Please try again.';
-        this.isLoading = false;
+        return;
       }
-    });
+
+      if (!this.product.price || this.product.price <= 0) {
+        this.errorMessage = 'Price must be greater than 0';
+        this.isLoading = false;
+        return;
+      }
+
+      if (!this.product.categoryId || this.product.categoryId <= 0) {
+        this.errorMessage = 'Please select a category';
+        this.isLoading = false;
+        return;
+      }
+
+      if (!this.product.brandId || this.product.brandId <= 0) {
+        this.errorMessage = 'Please select a brand';
+        this.isLoading = false;
+        return;
+      }
+
+      this.productService.addProduct(this.product).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.productAdded.emit(true);
+          this.close();
+        },
+        error: (error) => {
+          console.error('Error adding product:', error);
+          this.errorMessage = error.error?.message || error.message || 'Failed to add product. Please try again.';
+          this.isLoading = false;
+        }
+      });
+    } catch (err) {
+      console.error('Unexpected error in form submission:', err);
+      this.errorMessage = 'An unexpected error occurred. Please try again.';
+      this.isLoading = false;
+    }
   }
 
   close(): void {

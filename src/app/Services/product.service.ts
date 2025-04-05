@@ -1,24 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product } from '../../app/models/product';
-import { Category } from '../../app/models/category';
+import { Product } from '../models/product';
+import { Category } from '../models/category';
 import { Brand } from '../models/brand';
+import { environment } from '../../environments/environment'; // Import environment
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://localhost:7233/api';
+  private apiUrl = environment.apiUrl; // Use environment variable
 
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }
+  
   getBrandsByCategory(categoryId: number): Observable<Brand[]> {
-    return this.http.get<Brand[]>(`${this.apiUrl}/Brand/category/${categoryId}`);
+    return this.http.get<Brand[]>(`${this.apiUrl}/brands/category/${categoryId}`);
   }
+  
   searchProducts(searchParams: {
     query?: string;
     minPrice?: number;
@@ -50,12 +53,13 @@ export class ProductService {
   getSubcategories(categoryId: number): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}/categories/subcategories/${categoryId}`);
   }
+  
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.apiUrl}/categories`); // New endpoint (optional)
+    return this.http.get<Category[]>(`${this.apiUrl}/categories`);
   }
 
   getSuggestions(query: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/Product/suggestions?query=${query}`);
+    return this.http.get<string[]>(`${this.apiUrl}/products/suggestions?query=${query}`);
   }
   
   addProduct(product: {
@@ -65,7 +69,7 @@ export class ProductService {
     categoryId: number;
     brandId: number;
   }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/Product`, product);
+    return this.http.post<Product>(`${this.apiUrl}/products`, product);
   }
   
 }

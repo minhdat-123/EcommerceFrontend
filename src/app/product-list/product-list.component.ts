@@ -84,30 +84,43 @@ export class ProductListComponent implements OnInit {
   }
 
   onTopLevelCategoryChange(categoryIdValue: any): void {
-    // Convert to number or set to null if "null" string or empty
-    const categoryId = categoryIdValue && categoryIdValue !== "null" ? 
-      Number(categoryIdValue) : null;
-    
-    this.selectedTopLevelCategoryId = categoryId;
-    this.selectedBrandId = null;
-    this.brands = [];
-    this.selectedSubcategoryId = null;
-    
-    if (this.selectedTopLevelCategoryId !== null) {
-      this.isLoading = true;
-      this.productService.getSubcategories(this.selectedTopLevelCategoryId).subscribe({
-        next: (subcategories) => {
-          this.subcategories = subcategories || [];
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading subcategories:', error);
-          this.subcategories = [];
-          this.isLoading = false;
-        }
-      });
-    } else {
-      this.subcategories = [];
+    try {
+      // Convert to number or set to null if "null" string or empty
+      const categoryId = categoryIdValue && categoryIdValue !== "null" ? 
+        Number(categoryIdValue) : null;
+      
+      this.selectedTopLevelCategoryId = categoryId;
+      this.selectedBrandId = null;
+      this.brands = [];
+      this.selectedSubcategoryId = null;
+      
+      if (this.selectedTopLevelCategoryId !== null) {
+        this.isLoading = true;
+        this.productService.getSubcategories(this.selectedTopLevelCategoryId).subscribe({
+          next: (subcategories) => {
+            this.subcategories = subcategories || [];
+            this.isLoading = false;
+            this.page = 1; // Reset page when category changes
+            this.onSearch(); // Trigger search after loading subcategories
+          },
+          error: (error) => {
+            console.error('Error loading subcategories:', error);
+            this.subcategories = [];
+            this.isLoading = false;
+            // Perform search anyway with the top-level category
+            this.page = 1; // Reset page
+            this.onSearch();
+          }
+        });
+      } else {
+        this.subcategories = [];
+        // Reset and search with no category filter
+        this.page = 1; // Reset page
+        this.onSearch();
+      }
+    } catch (err) {
+      console.error('Unexpected error in category change:', err);
+      this.isLoading = false;
     }
   }
 
@@ -123,47 +136,78 @@ export class ProductListComponent implements OnInit {
     if (this.selectedSubcategoryId !== null) {
       this.isLoading = true;
       this.productService.getBrandsByCategory(this.selectedSubcategoryId).subscribe({
-        next: (brands) => {
-          this.brands = brands || [];
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading brands:', error);
-          this.brands = [];
-          this.isLoading = false;
-        }
-      });
+          next: (brands) => {
+            this.brands = brands || [];
+            this.isLoading = false;
+            this.page = 1; // Reset page when subcategory changes
+            this.onSearch(); // Trigger search after loading brands
+          },
+          error: (error) => {
+            console.error('Error loading brands:', error);
+            this.brands = [];
+            this.isLoading = false;
+            this.page = 1; // Reset page
+            this.onSearch(); // Trigger search even if brands fail to load
+          }
+        });
+      } else {
+         // If subcategory is deselected (set to null), trigger search
+         this.page = 1; // Reset page
+         this.onSearch();
+      }
     }
-  }
 
   onSearch(): void {
     this.isLoading = true;
     
-    let searchParams = {
-      query: this.searchQuery,
-      minPrice: this.minPrice ?? undefined,
-      maxPrice: this.maxPrice ?? undefined,
-      sortBy: this.sortBy,
-      categoryId: this.selectedSubcategoryId ?? undefined,
-      parentCategoryId: this.selectedTopLevelCategoryId ?? undefined,
-      brandId: this.selectedBrandId ?? undefined,
-      page: this.page,
-      pageSize: this.pageSize
-    };
-    
-    this.productService.searchProducts(searchParams).subscribe({
-      next: (response) => {
-        this.products = response.products || [];
-        this.totalItems = response.totalCount;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error searching products:', error);
-        this.products = [];
-        this.totalItems = 0;
-        this.isLoading = false;
+    try {
+      // Validate number inputs
+      this.minPrice = this.parseNumber(this.minPrice);
+      this.maxPrice = this.parseNumber(this.maxPrice);
+      
+      // Ensure min price is not greater than max price
+      if (this.minPrice !== null && this.maxPrice !== null && this.minPrice > this.maxPrice) {
+        const temp = this.minPrice;
+        this.minPrice = this.maxPrice;
+        this.maxPrice = temp;
       }
-    });
+      
+      let searchParams = {
+        query: this.searchQuery,
+        minPrice: this.minPrice ?? undefined,
+        maxPrice: this.maxPrice ?? undefined,
+        sortBy: this.sortBy,
+        categoryId: this.selectedSubcategoryId ?? undefined,
+        parentCategoryId: this.selectedTopLevelCategoryId ?? undefined,
+        brandId: this.selectedBrandId ?? undefined,
+        page: this.page,
+        pageSize: this.pageSize
+      };
+      
+      this.productService.searchProducts(searchParams).subscribe({
+        next: (response) => {
+          this.products = response.products || [];
+          this.totalItems = response.totalCount;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error searching products:', error);
+          this.products = [];
+          this.totalItems = 0;
+          this.isLoading = false;
+          
+          // Try to load all products as fallback
+          if (this.selectedTopLevelCategoryId === null && this.searchQuery === '' &&
+              this.minPrice === null && this.maxPrice === null) {
+            this.loadProducts();
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Unexpected error in search:', err);
+      this.isLoading = false;
+      this.products = [];
+    }
   }
   
   loadProducts(): void {

@@ -54,8 +54,8 @@
             <h3>{{ product.name }}</h3>
             <p class="product-price">${{ product.price.toFixed(2) }}</p>
             <p class="product-description">{{ product.description }}</p>
-            <p class="product-category">Category: {{ product.categoryName }}</p>
-            <p class="product-brand">Brand: {{ product.brandName }}</p>
+            <p class="product-category">Category: {{ product.categoryName || 'Unknown' }}</p>
+            <p class="product-brand">Brand: {{ product.brandName || 'Unknown' }}</p>
         </div>
         <!-- Buy button commented out for future use -->
         <!-- <button (click)="buyProduct(product)" [disabled]="isLoading">Buy Now</button> -->
